@@ -1,5 +1,6 @@
 package com.example.securitytutorial.auth;
 
+import com.example.securitytutorial.models.Roles;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
@@ -46,10 +47,16 @@ public class SecurityConfig {
                 .username("admin")
 //                .password( "1234")
                 .password(passwordEncoder().encode("1234"))
-                .roles("USER")
+                .roles(Roles.ADMIN.name())
+                .build();
+        UserDetails userDetails2 = User.builder()
+                .username("user")
+//                .password( "1234")
+                .password(passwordEncoder().encode("1234"))
+                .roles(Roles.USER.name())
                 .build();
 
-        return new InMemoryUserDetailsManager(userDetails);
+        return new InMemoryUserDetailsManager(userDetails, userDetails2);
     }
 
 

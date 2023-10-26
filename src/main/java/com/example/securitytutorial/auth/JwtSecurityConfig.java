@@ -1,6 +1,7 @@
 package com.example.securitytutorial.auth;
 
 import com.example.securitytutorial.config.JwtAuthFilter;
+import com.example.securitytutorial.models.Roles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,11 +25,14 @@ public class JwtSecurityConfig {
                 .cors(cors->cors.disable())
                 .authorizeHttpRequests((authorizeHttpRequests) ->
                         authorizeHttpRequests
-//                                .requestMatchers("/auth/login").permitAll()
-                                .requestMatchers("/**").permitAll()
+                                .requestMatchers("/auth/*").permitAll()
+                                .requestMatchers("/admin/*").hasAnyRole(Roles.ADMIN.name())
+                                .requestMatchers("/user/*").hasAnyRole(Roles.USER.name(), Roles.ADMIN.name())
+                                .requestMatchers("/public/*").permitAll()
+//                                .requestMatchers("/**").permitAll()
 //                                .authenticated()
 //                                .requestMatchers("/auth/**").permitAll()
-                                .anyRequest().permitAll()
+                                .anyRequest().authenticated()
 //                                .authenticated()
                 )
                 .sessionManagement(session ->
